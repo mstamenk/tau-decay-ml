@@ -32,9 +32,17 @@ pdgId_map = {
 
 if __name__ == '__main__':
     column_names = ['pi1_from_tau_pt', 'pi1_from_tau_eta', 'pi1_from_tau_phi','pi2_from_tau_pt', 'pi2_from_tau_eta', 'pi2_from_tau_phi', 'pi3_from_tau_pt', 'pi3_from_tau_eta', 'pi3_from_tau_phi',
-                    'pi1_from_antitau_pt', 'pi1_from_antitau_eta', 'pi1_from_antitau_phi', 'pi2_from_antitau_pt', 'pi2_from_antitau_eta', 'pi2_from_antitau_phi','pi3_from_antitau_pt', 'pi3_from_antitau_eta', 'pi3_from_antitau_phi', 
-                    'neutrino_from_tau_pt','neutrino_from_tau_eta','neutrino_from_tau_phi','neutrino_from_antitau_pt','neutrino_from_antitau_eta','neutrino_from_antitau_phi']
+                                 'pi1_from_antitau_pt', 'pi1_from_antitau_eta', 'pi1_from_antitau_phi', 'pi2_from_antitau_pt', 'pi2_from_antitau_eta', 'pi2_from_antitau_phi','pi3_from_antitau_pt', 'pi3_from_antitau_eta', 'pi3_from_antitau_phi', 
+                                 'neutrino_from_tau_pt','neutrino_from_tau_eta','neutrino_from_tau_phi','neutrino_from_antitau_pt','neutrino_from_antitau_eta','neutrino_from_antitau_phi', 'tau_no_neutrino_mass', 'tau_with_neutrino_mass', 
+                                 'antitau_no_neutrino_mass', 'antitau_with_neutrino_mass', 'upsilon_no_neutrino_mass', 'upsilon_with_neutrino_mass']
+    
     df_toUse = pd.DataFrame(columns = column_names)
+
+    gen_column_names = ['gen_pi1_from_tau_pt', 'gen_pi1_from_tau_eta', 'gen_pi1_from_tau_phi', 'gen_pi2_from_tau_pt', 'gen_pi2_from_tau_eta', 'gen_pi2_from_tau_phi', 'gen_pi3_from_tau_pt', 'gen_pi3_from_tau_eta', 'gen_pi3_from_tau_phi',
+                               'gen_pi1_from_antitau_pt', 'gen_pi1_from_antitau_eta', 'gen_pi1_from_antitau_phi', 'gen_pi2_from_antitau_pt', 'gen_pi2_from_antitau_eta', 'gen_pi2_from_antitau_phi', 'gen_pi3_from_antitau_pt', 'gen_pi3_from_antitau_eta', 'gen_pi3_from_antitau_phi',
+                               'gen_tau_pt', 'gen_tau_eta', 'gen_tau_phi', 'gen_antitau_pt', 'gen_antitau_eta', 'gen_antitau_phi', 'gen_upsilon_pt', 'gen_upsilon_eta', 'gen_upsilon_phi', 'gen_upsilon_mass']
+    
+    df_genInfo = pd.DataFrame(columns = gen_column_names)
 
 
     # Argument parser and fixing the CMSSW version via the options container
@@ -167,6 +175,7 @@ if __name__ == '__main__':
         tau_plus_neutrino = []
         for tau_plus in tau_plus_list:
             if isAncestor(upsilon_list[0], tau_plus.mother(0)):
+                tau_from_upsilon = tau_plus
                 for pi_plus in pi_plus_list:
                     if isAncestor(tau_plus, pi_plus.mother(0)):
                         tau_plus_daughters.append(pi_plus)
@@ -192,6 +201,7 @@ if __name__ == '__main__':
         tau_minus_daughters = []
         tau_minus_neutrino = []
         for tau_minus in tau_minus_list:
+            antitau_from_upsilon = tau_minus
             if isAncestor(upsilon_list[0], tau_minus.mother(0)):
                 for pi_plus in pi_plus_list:
                     if isAncestor(tau_minus, pi_plus.mother(0)):
@@ -212,7 +222,9 @@ if __name__ == '__main__':
                     tau_counter = tau_counter + 1
                     tau_minus_keep = tau_minus
                     break
-       
+
+
+       ###
         if tau_counter != 2:
             #print('No good taus found!')
             continue
@@ -296,6 +308,28 @@ if __name__ == '__main__':
                 pi3_minus_lv.SetPtEtaPhiM(matched_pion_minus[2].pt(), matched_pion_minus[2].eta(), matched_pion_minus[2].phi(), 0.139)
                 neutrino_minus_lv.SetPtEtaPhiM(tau_minus_neutrino[0].pt(), tau_minus_neutrino[0].eta(), tau_minus_neutrino[0].phi(), 0)
 
+                tau_plus_no_neutrino_lv = pi1_plus_lv + pi2_plus_lv + pi3_plus_lv
+                tau_plus_with_neutrino_lv = pi1_plus_lv + pi2_plus_lv + pi3_plus_lv + neutrino_plus_lv
+
+                tau_minus_no_neutrino_lv = pi1_minus_lv + pi2_minus_lv + pi3_minus_lv
+                tau_minus_with_neutrino_lv = pi1_minus_lv + pi2_minus_lv + pi3_minus_lv + neutrino_minus_lv
+
+                upsilon_no_neutrino_lv = tau_plus_no_neutrino_lv + tau_minus_no_neutrino_lv
+                upsilon_with_neutrino_lv = tau_plus_with_neutrino_lv + tau_minus_with_neutrino_lv
+
+                tau_no_neutrino_mass = tau_plus_no_neutrino_lv.M()
+                tau_with_neutrino_mass = tau_plus_with_neutrino_lv.M()
+
+                antitau_no_neutrino_mass = tau_plus_no_neutrino_lv.M()
+                antitau_with_neutrino_mass = tau_plus_with_neutrino_lv.M()
+
+                upsilon_no_neutrino_mass = upsilon_no_neutrino_lv.M()
+                upsilon_with_neutrino_mass = upsilon_with_neutrino_lv.M()
+
+
+
+
+
             
                 #switching nomenclature here to tau and antitau
 
@@ -331,21 +365,97 @@ if __name__ == '__main__':
                 neutrino_from_antitau_eta = neutrino_minus_lv.Eta()
                 neutrino_from_antitau_phi = neutrino_minus_lv.Phi()
 
+                ### Gen Level Info Saving ###
+
+                gen_tau_lv = ROOT.TLorentzVector()
+                gen_pi1_from_tau_lv = ROOT.TLorentzVector()
+                gen_pi2_from_tau_lv = ROOT.TLorentzVector()
+                gen_pi3_from_tau_lv = ROOT.TLorentzVector()
+
+                gen_tau_lv.SetPtEtaPhiM(tau_from_upsilon.pt(), tau_from_upsilon.eta(), tau_from_upsilon.phi(), tau_from_upsilon.mass())
+                gen_pi1_from_tau_lv.SetPtEtaPhiM(tau_plus_daughters[0].pt(), tau_plus_daughters[0].eta(), tau_plus_daughters[0].phi(), tau_plus_daughters[0].mass())
+                gen_pi2_from_tau_lv.SetPtEtaPhiM(tau_plus_daughters[1].pt(), tau_plus_daughters[1].eta(), tau_plus_daughters[1].phi(), tau_plus_daughters[1].mass())
+                gen_pi3_from_tau_lv.SetPtEtaPhiM(tau_plus_daughters[2].pt(), tau_plus_daughters[2].eta(), tau_plus_daughters[2].phi(), tau_plus_daughters[2].mass())
+
+                gen_pi1_from_tau_pt = gen_pi1_from_tau_lv.Pt()
+                gen_pi1_from_tau_eta = gen_pi1_from_tau_lv.Eta()
+                gen_pi1_from_tau_phi = gen_pi1_from_tau_lv.Phi()
+
+                gen_pi2_from_tau_pt = gen_pi2_from_tau_lv.Pt()
+                gen_pi2_from_tau_eta = gen_pi2_from_tau_lv.Eta()
+                gen_pi2_from_tau_phi = gen_pi2_from_tau_lv.Phi()
+
+                gen_pi3_from_tau_pt = gen_pi3_from_tau_lv.Pt()
+                gen_pi3_from_tau_eta = gen_pi3_from_tau_lv.Eta()
+                gen_pi3_from_tau_phi = gen_pi3_from_tau_lv.Phi()
+
+                gen_tau_pt = gen_tau_lv.Pt()
+                gen_tau_eta = gen_tau_lv.Eta()
+                gen_tau_phi = gen_tau_lv.Phi()
+
+                gen_antitau_lv = ROOT.TLorentzVector()
+                gen_pi1_from_antitau_lv = ROOT.TLorentzVector()
+                gen_pi2_from_antitau_lv = ROOT.TLorentzVector()
+                gen_pi3_from_antitau_lv = ROOT.TLorentzVector()
+
+                gen_antitau_lv.SetPtEtaPhiM(antitau_from_upsilon.pt(), antitau_from_upsilon.eta(), antitau_from_upsilon.phi(), antitau_from_upsilon.mass())
+                gen_pi1_from_antitau_lv.SetPtEtaPhiM(tau_minus_daughters[0].pt(), tau_minus_daughters[0].eta(), tau_minus_daughters[0].phi(), tau_minus_daughters[0].mass())
+                gen_pi2_from_antitau_lv.SetPtEtaPhiM(tau_minus_daughters[1].pt(), tau_minus_daughters[1].eta(), tau_minus_daughters[1].phi(), tau_minus_daughters[1].mass())
+                gen_pi3_from_antitau_lv.SetPtEtaPhiM(tau_minus_daughters[2].pt(), tau_minus_daughters[2].eta(), tau_minus_daughters[2].phi(), tau_minus_daughters[2].mass())
+
+                gen_pi1_from_antitau_pt = gen_pi1_from_antitau_lv.Pt()
+                gen_pi1_from_antitau_eta = gen_pi1_from_antitau_lv.Eta()
+                gen_pi1_from_antitau_phi = gen_pi1_from_antitau_lv.Phi()
+
+                gen_pi2_from_antitau_pt = gen_pi2_from_antitau_lv.Pt()
+                gen_pi2_from_antitau_eta = gen_pi2_from_antitau_lv.Eta()
+                gen_pi2_from_antitau_phi = gen_pi2_from_antitau_lv.Phi()
+
+                gen_pi3_from_antitau_pt = gen_pi3_from_antitau_lv.Pt()
+                gen_pi3_from_antitau_eta = gen_pi3_from_antitau_lv.Eta()
+                gen_pi3_from_antitau_phi = gen_pi3_from_antitau_lv.Phi()
+
+                gen_antitau_pt = gen_antitau_lv.Pt()
+                gen_antitau_eta = gen_antitau_lv.Eta()
+                gen_antitau_phi = gen_antitau_lv.Phi()
+
+                gen_upsilon = upsilon_list[0]
+                gen_upsilon_lv = ROOT.TLorentzVector()
+                gen_upsilon_lv.SetPtEtaPhiM(gen_upsilon.pt(), gen_upsilon.eta(), gen_upsilon.phi(), gen_upsilon.mass())
+
+                gen_upsilon_pt = gen_upsilon_lv.Pt()
+                gen_upsilon_eta = gen_upsilon_lv.Eta()
+                gen_upsilon_phi = gen_upsilon_lv.Phi()
+                gen_upsilon_mass = gen_upsilon_lv.M()
+
                 columns_names = ['pi1_from_tau_pt', 'pi1_from_tau_eta', 'pi1_from_tau_phi','pi2_from_tau_pt', 'pi2_from_tau_eta', 'pi2_from_tau_phi', 'pi3_from_tau_pt', 'pi3_from_tau_eta', 'pi3_from_tau_phi',
                                  'pi1_from_antitau_pt', 'pi1_from_antitau_eta', 'pi1_from_antitau_phi', 'pi2_from_antitau_pt', 'pi2_from_antitau_eta', 'pi2_from_antitau_phi','pi3_from_antitau_pt', 'pi3_from_antitau_eta', 'pi3_from_antitau_phi' 
-                                 'neutrino_from_tau_pt','neutrino_from_tau_eta','neutrino_from_tau_phi','neutrino_from_antitau_pt','neutrino_from_antitau_eta','neutrino_from_antitau_phi']
+                                 'neutrino_from_tau_pt','neutrino_from_tau_eta','neutrino_from_tau_phi','neutrino_from_antitau_pt','neutrino_from_antitau_eta','neutrino_from_antitau_phi', 'tau_no_neutrino_mass', 'tau_with_neutrino_mass', 
+                                 'antitau_no_neutrino_mass', 'antitau_with_neutrino_mass', 'upsilon_no_neutrino_mass', 'upsilon_with_neutrino_mass']
             
                 add_row = [pi1_from_tau_pt, pi1_from_tau_eta, pi1_from_tau_phi, pi2_from_tau_pt, pi2_from_tau_eta, pi2_from_tau_phi, pi3_from_tau_pt, pi3_from_tau_eta, pi3_from_tau_phi,
                                  pi1_from_antitau_pt, pi1_from_antitau_eta, pi1_from_antitau_phi, pi2_from_antitau_pt, pi2_from_antitau_eta, pi2_from_antitau_phi,pi3_from_antitau_pt, pi3_from_antitau_eta, pi3_from_antitau_phi,
-                                 neutrino_from_tau_pt, neutrino_from_tau_eta,neutrino_from_tau_phi,neutrino_from_antitau_pt,neutrino_from_antitau_eta,neutrino_from_antitau_phi]
+                                 neutrino_from_tau_pt, neutrino_from_tau_eta, neutrino_from_tau_phi,neutrino_from_antitau_pt,neutrino_from_antitau_eta,neutrino_from_antitau_phi, tau_no_neutrino_mass, tau_with_neutrino_mass, 
+                                 antitau_no_neutrino_mass, antitau_with_neutrino_mass, upsilon_no_neutrino_mass, upsilon_with_neutrino_mass]
                 
-                print(len(add_row))
-                print(len(column_names))
+                gen_column_names = ['gen_pi1_from_tau_pt', 'gen_pi1_from_tau_eta', 'gen_pi1_from_tau_phi', 'gen_pi2_from_tau_pt', 'gen_pi2_from_tau_eta', 'gen_pi2_from_tau_phi', 'gen_pi3_from_tau_pt', 'gen_pi3_from_tau_eta', 'gen_pi3_from_tau_phi',
+                               'gen_pi1_from_antitau_pt', 'gen_pi1_from_antitau_eta', 'gen_pi1_from_antitau_phi', 'gen_pi2_from_antitau_pt', 'gen_pi2_from_antitau_eta', 'gen_pi2_from_antitau_phi', 'gen_pi3_from_antitau_pt', 'gen_pi3_from_antitau_eta', 'gen_pi3_from_antitau_phi',
+                               'gen_tau_pt', 'gen_tau_eta', 'gen_tau_phi', 'gen_antitau_pt', 'gen_antitau_eta', 'gen_antitau_phi', 'gen_upsilon_pt', 'gen_upsilon_eta', 'gen_upsilon_phi', 'gen_upsilon_mass']
+
+                add_gen_row = [gen_pi1_from_tau_pt, gen_pi1_from_tau_eta, gen_pi1_from_tau_phi, gen_pi2_from_tau_pt, gen_pi2_from_tau_eta, gen_pi2_from_tau_phi, gen_pi3_from_tau_pt, gen_pi3_from_tau_eta, gen_pi3_from_tau_phi,
+                               gen_pi1_from_antitau_pt, gen_pi1_from_antitau_eta, gen_pi1_from_antitau_phi, gen_pi2_from_antitau_pt, gen_pi2_from_antitau_eta, gen_pi2_from_antitau_phi, gen_pi3_from_antitau_pt, gen_pi3_from_antitau_eta, gen_pi3_from_antitau_phi,
+                               gen_tau_pt, gen_tau_eta, gen_tau_phi, gen_antitau_pt, gen_antitau_eta, gen_antitau_phi, gen_upsilon_pt, gen_upsilon_eta, gen_upsilon_phi, gen_upsilon_mass]
                 
                 add_row_df = pd.DataFrame([add_row], columns = df_toUse.columns)
                 df_toUse = pd.concat([df_toUse, add_row_df], ignore_index=True)
-        eventNumber = eventNumber + 1
-    print(df_toUse)
+
+                add_gen_row_df = pd.DataFrame([add_gen_row], columns = df_genInfo.columns)
+                df_genInfo = pd.concat([df_genInfo, add_gen_row_df], ignore_index=True)
+
+    df_toUse.to_csv('/isilon/export/home/gpitt3/tau-decay-ml/preprocessing/reco_information_first_miniaod.csv')
+    df_genInfo.to_csv('/isilon/export/home/gpitt3/tau-decay-ml/preprocessing/gen_information_first_miniaod.csv')
+    print('csv saved')
+
         
 
 
