@@ -32,7 +32,7 @@ pdgId_map = {
 
 if __name__ == '__main__':
     column_names = ['pi1_from_tau_pt', 'pi1_from_tau_eta', 'pi1_from_tau_phi','pi2_from_tau_pt', 'pi2_from_tau_eta', 'pi2_from_tau_phi', 'pi3_from_tau_pt', 'pi3_from_tau_eta', 'pi3_from_tau_phi',
-                    'pi1_from_antitau_pt', 'pi1_from_antitau_eta', 'pi1_from_antitau_phi', 'pi2_from_antitau_pt', 'pi2_from_antitau_eta', 'pi2_from_antitau_phi','pi3_from_antitau_pt', 'pi3_from_antitau_eta', 'pi3_from_antitau_phi' 
+                    'pi1_from_antitau_pt', 'pi1_from_antitau_eta', 'pi1_from_antitau_phi', 'pi2_from_antitau_pt', 'pi2_from_antitau_eta', 'pi2_from_antitau_phi','pi3_from_antitau_pt', 'pi3_from_antitau_eta', 'pi3_from_antitau_phi', 
                     'neutrino_from_tau_pt','neutrino_from_tau_eta','neutrino_from_tau_phi','neutrino_from_antitau_pt','neutrino_from_antitau_eta','neutrino_from_antitau_phi']
     df_toUse = pd.DataFrame(columns = column_names)
 
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     from FWCore.ParameterSet.VarParsing import VarParsing # Needed to input the file
     options = VarParsing ('python')  
     options.inputFiles = [filename]
-    options.maxEvents =  200 # run on 10 events first, -1 for all the events
+    options.maxEvents =  -1 # run on 10 events first, -1 for all the events
 
     options.parseArguments()
     #print(options)
@@ -236,7 +236,7 @@ if __name__ == '__main__':
                         deltaPT_plus = (reco_lv.Pt() - gen_lv_plus.Pt()) / gen_lv_plus.Pt()
                         #print(deltaPT_plus, deltaR_plus)
                         
-                        if abs(deltaR_plus) < 0.1 and abs(deltaPT_plus) < 0.3 and abs(deltaR_plus) < min_deltaR_plus and abs(reco_particle.eta()) < 2.5 and reco_particle not in matched_pion_plus and reco_particle not in matched_pion_minus:
+                        if abs(deltaR_plus) < 0.4 and abs(deltaPT_plus) < 0.3 and abs(deltaR_plus) < min_deltaR_plus and abs(reco_particle.eta()) < 2.5 and reco_particle not in matched_pion_plus and reco_particle not in matched_pion_minus:
                             #print('found candidate')
                             min_deltaR_plus = deltaR_plus
                             matched_pion_p = reco_particle
@@ -262,7 +262,7 @@ if __name__ == '__main__':
                         deltaR_minus = gen_lv_minus.DeltaR(reco_lv)
                         deltaPT_minus = (reco_lv.Pt() - gen_lv_minus.Pt()) / gen_lv_minus.Pt()
 
-                        if abs(deltaR_minus) < 0.1 and deltaPT_minus < 0.3 and deltaR_minus < min_deltaR_minus and abs(reco_particle.eta()) < 2.5 and reco_particle not in matched_pion_minus and reco_particle not in matched_pion_plus:
+                        if abs(deltaR_minus) < 0.4 and deltaPT_minus < 0.3 and deltaR_minus < min_deltaR_minus and abs(reco_particle.eta()) < 2.5 and reco_particle not in matched_pion_minus and reco_particle not in matched_pion_plus:
                             #print('found candidate')
                             min_deltaR_minus = deltaR_minus
                             matched_pion_m = reco_particle
@@ -335,11 +335,14 @@ if __name__ == '__main__':
                                  'pi1_from_antitau_pt', 'pi1_from_antitau_eta', 'pi1_from_antitau_phi', 'pi2_from_antitau_pt', 'pi2_from_antitau_eta', 'pi2_from_antitau_phi','pi3_from_antitau_pt', 'pi3_from_antitau_eta', 'pi3_from_antitau_phi' 
                                  'neutrino_from_tau_pt','neutrino_from_tau_eta','neutrino_from_tau_phi','neutrino_from_antitau_pt','neutrino_from_antitau_eta','neutrino_from_antitau_phi']
             
-                add_row = [pi1_from_tau_pt, pi1_from_tau_eta, pi1_from_tau_phi,pi2_from_tau_pt, pi2_from_tau_eta, pi2_from_tau_phi, pi3_from_tau_pt, pi3_from_tau_eta, pi3_from_tau_phi,
+                add_row = [pi1_from_tau_pt, pi1_from_tau_eta, pi1_from_tau_phi, pi2_from_tau_pt, pi2_from_tau_eta, pi2_from_tau_phi, pi3_from_tau_pt, pi3_from_tau_eta, pi3_from_tau_phi,
                                  pi1_from_antitau_pt, pi1_from_antitau_eta, pi1_from_antitau_phi, pi2_from_antitau_pt, pi2_from_antitau_eta, pi2_from_antitau_phi,pi3_from_antitau_pt, pi3_from_antitau_eta, pi3_from_antitau_phi,
                                  neutrino_from_tau_pt, neutrino_from_tau_eta,neutrino_from_tau_phi,neutrino_from_antitau_pt,neutrino_from_antitau_eta,neutrino_from_antitau_phi]
                 
-                add_row_df = pd.DataFrame([add_row, column_names])
+                print(len(add_row))
+                print(len(column_names))
+                
+                add_row_df = pd.DataFrame([add_row], columns = df_toUse.columns)
                 df_toUse = pd.concat([df_toUse, add_row_df], ignore_index=True)
         eventNumber = eventNumber + 1
     print(df_toUse)
