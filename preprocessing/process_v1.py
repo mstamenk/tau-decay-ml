@@ -112,11 +112,11 @@ if __name__ == '__main__':
     
     df_matched_gen_info_tau_only = pd.DataFrame(columns = gen_column_names_only_plus)
 
-    gen_column_names_only_minus = ['gen_pi1_from_tau_pt', 'gen_pi1_from_tau_eta', 'gen_pi1_from_tau_phi', 'gen_pi2_from_tau_pt', 'gen_pi2_from_tau_eta', 'gen_pi2_from_tau_phi', 'gen_pi3_from_tau_pt', 'gen_pi3_from_tau_eta', 'gen_pi3_from_tau_phi',
-                               'gen_tau_pt', 'gen_tau_eta', 'gen_tau_phi']
+    gen_column_names_only_minus = ['gen_pi1_from_antitau_pt', 'gen_pi1_from_antitau_eta', 'gen_pi1_from_antitau_phi', 'gen_pi2_from_antitau_pt', 'gen_pi2_from_antitau_eta', 'gen_pi2_from_antitau_phi', 'gen_pi3_from_antitau_pt', 'gen_pi3_from_antitau_eta', 'gen_pi3_from_antitau_phi',
+                               'gen_antitau_pt', 'gen_antitau_eta', 'gen_antitau_phi']
     
-    column_names_only_minus = ['pi1_from_tau_pt', 'pi1_from_tau_eta', 'pi1_from_tau_phi','pi2_from_tau_pt', 'pi2_from_tau_eta', 'pi2_from_tau_phi', 'pi3_from_tau_pt', 'pi3_from_tau_eta', 'pi3_from_tau_phi',
-                                 'neutrino_from_tau_pt','neutrino_from_tau_eta','neutrino_from_tau_phi', 'tau_no_neutrino_mass', 'tau_with_neutrino_mass']
+    column_names_only_minus = ['pi1_from_antitau_pt', 'pi1_from_antitau_eta', 'pi1_from_antitau_phi','pi2_from_antitau_pt', 'pi2_from_antitau_eta', 'pi2_from_antitau_phi', 'pi3_from_antitau_pt', 'pi3_from_antitau_eta', 'pi3_from_antitau_phi',
+                                 'neutrino_from_antitau_pt','neutrino_from_antitau_eta','neutrino_from_antitau_phi', 'tau_no_neutrino_mass', 'tau_with_neutrino_mass']
     
     df_toUse_antitau_only = pd.DataFrame(columns = column_names_only_minus)
     
@@ -127,7 +127,7 @@ if __name__ == '__main__':
 
     both_proper_decay = 0
     proper_tau_decay_only = 0
-    proper_antitau_decy_only = 0
+    proper_antitau_decay_only = 0
     no_proper_decays = 0
 
     num_taus_fully_reconstructed = 0
@@ -278,6 +278,8 @@ if __name__ == '__main__':
 
                 #Case in which tau decays without neutral pions, but antitau does not
                 if good_taup and not good_taum:
+
+
                     proper_tau_decay_only = proper_tau_decay_only + 1
 
                     #Save gen pion information regardless of whether it is matched to a reco level pion
@@ -302,10 +304,10 @@ if __name__ == '__main__':
                     gen_pi3_from_tau_phi = gen_pi3_plus_lv_unmatched.Phi()
 
 
-                    add_gen_row = [gen_pi1_from_tau_pt, gen_pi2_from_tau_pt, gen_pi3_from_tau_pt]
-                    add_gen_row_df = pd.DataFrame([add_gen_row], columns = df_unmatched_gen_info_tau_only.columns)
-                    df_unmatched_gen_info_tau_only = pd.concat([df_unmatched_gen_info_tau_only, add_gen_row_df], ignore_index=True)
-
+                    add_gen_row_tau_plus = [gen_pi1_from_tau_pt, gen_pi1_from_tau_eta, gen_pi1_from_tau_phi, gen_pi2_from_tau_pt, gen_pi2_from_tau_eta, gen_pi2_from_tau_phi, gen_pi3_from_tau_pt, gen_pi3_from_tau_eta, gen_pi3_from_tau_phi]
+                    add_gen_row_df_tau_plus = pd.DataFrame([add_gen_row_tau_plus], columns = df_unmatched_gen_info_tau_only.columns)
+                    df_unmatched_gen_info_tau_only = pd.concat([df_unmatched_gen_info_tau_only, add_gen_row_df_tau_plus], ignore_index=True)
+  
                     ###MATCHING CODE###
                     tau_from_upsilon = tau_plus_keep
                     matched_pion_plus = []
@@ -437,23 +439,25 @@ if __name__ == '__main__':
                     gen_pi2_minus_lv_unmatched.SetPtEtaPhiM(tau_minus_daughters[1].pt(), tau_minus_daughters[1].eta(), tau_minus_daughters[1].phi(), 0.139)
                     gen_pi3_minus_lv_unmatched.SetPtEtaPhiM(tau_minus_daughters[2].pt(), tau_minus_daughters[2].eta(), tau_minus_daughters[2].phi(), 0.139)
 
-                    gen_pi1_from_antitau_pt = gen_pi1_plus_lv_unmatched.Pt()
-                    gen_pi1_from_antitau_eta = gen_pi1_plus_lv_unmatched.Eta()
-                    gen_pi1_from_antitau_phi = gen_pi1_plus_lv_unmatched.Phi()
+                    gen_pi1_from_antitau_pt = gen_pi1_minus_lv_unmatched.Pt()
+                    gen_pi1_from_antitau_eta = gen_pi1_minus_lv_unmatched.Eta()
+                    gen_pi1_from_antitau_phi = gen_pi1_minus_lv_unmatched.Phi()
 
-                    gen_pi2_from_antitau_pt = gen_pi2_plus_lv_unmatched.Pt()
-                    gen_pi2_from_antitau_eta = gen_pi2_plus_lv_unmatched.Eta()
-                    gen_pi2_from_antitau_phi = gen_pi2_plus_lv_unmatched.Phi()
+                    gen_pi2_from_antitau_pt = gen_pi2_minus_lv_unmatched.Pt()
+                    gen_pi2_from_antitau_eta = gen_pi2_minus_lv_unmatched.Eta()
+                    gen_pi2_from_antitau_phi = gen_pi2_minus_lv_unmatched.Phi()
 
-                    gen_pi3_from_antitau_pt = gen_pi3_plus_lv_unmatched.Pt()
-                    gen_pi3_from_antitau_eta = gen_pi3_plus_lv_unmatched.Eta()                        
-                    gen_pi3_from_antitau_phi = gen_pi3_plus_lv_unmatched.Phi()
+                    gen_pi3_from_antitau_pt = gen_pi3_minus_lv_unmatched.Pt()
+                    gen_pi3_from_antitau_eta = gen_pi3_minus_lv_unmatched.Eta()                        
+                    gen_pi3_from_antitau_phi = gen_pi3_minus_lv_unmatched.Phi()
 
+  
+                    add_gen_row_tau_minus = [gen_pi1_from_antitau_pt, gen_pi1_from_antitau_eta, gen_pi1_from_antitau_phi, gen_pi2_from_antitau_pt, gen_pi2_from_antitau_eta, gen_pi2_from_antitau_phi, gen_pi3_from_antitau_pt, gen_pi3_from_antitau_eta, gen_pi3_from_antitau_phi]
+                    add_gen_row_df_tau_minus = pd.DataFrame([add_gen_row_tau_minus], columns = df_unmatched_gen_info_antitau_only.columns)
+           
 
-                    add_gen_row = [gen_pi1_from_antitau_pt, gen_pi2_from_antitau_pt, gen_pi3_from_antitau_pt]
-                    add_gen_row_df = pd.DataFrame([add_gen_row], columns = df_unmatched_gen_info_tau_only.columns)
-
-                    df_unmatched_gen_info_antitau_only = pd.concat([df_unmatched_gen_info_antitau_only, add_gen_row_df], ignore_index=True)       
+                    df_unmatched_gen_info_antitau_only = pd.concat([df_unmatched_gen_info_antitau_only, add_gen_row_df_tau_minus], ignore_index=True)   
+   
 
                     #Start matching gen pions to reco pions for antitau
                                  
@@ -552,29 +556,31 @@ if __name__ == '__main__':
                         gen_antitau_phi = gen_antitau_lv.Phi()
 
 
-                        column_names_only_minus = ['pi1_from_tau_pt', 'pi1_from_tau_eta', 'pi1_from_tau_phi','pi2_from_tau_pt', 'pi2_from_tau_eta', 'pi2_from_tau_phi', 'pi3_from_tau_pt', 'pi3_from_tau_eta', 'pi3_from_tau_phi',
-                                 'neutrino_from_tau_pt','neutrino_from_tau_eta','neutrino_from_tau_phi', 'tau_no_neutrino_mass', 'tau_with_neutrino_mass']
+                        column_names_only_minus = ['pi1_from_antitau_pt', 'pi1_from_antitau_eta', 'pi1_from_antitau_phi','pi2_from_antitau_pt', 'pi2_from_antitau_eta', 'pi2_from_antitau_phi', 'pi3_from_antitau_pt', 'pi3_from_antitau_eta', 'pi3_from_antitau_phi',
+                                 'neutrino_from_antitau_pt','neutrino_from_antitau_eta','neutrino_from_antitau_phi', 'tau_no_neutrino_mass', 'tau_with_neutrino_mass']
             
-                        add_row = [pi1_from_tau_pt, pi1_from_tau_eta, pi1_from_tau_phi, pi2_from_tau_pt, pi2_from_tau_eta, pi2_from_tau_phi, pi3_from_tau_pt, pi3_from_tau_eta, pi3_from_tau_phi,
-                                 neutrino_from_tau_pt, neutrino_from_tau_eta, neutrino_from_tau_phi, tau_no_neutrino_mass, tau_with_neutrino_mass]
+                        add_row = [pi1_from_antitau_pt, pi1_from_antitau_eta, pi1_from_antitau_phi, pi2_from_antitau_pt, pi2_from_antitau_eta, pi2_from_antitau_phi, pi3_from_antitau_pt, pi3_from_antitau_eta, pi3_from_antitau_phi,
+                                 neutrino_from_antitau_pt, neutrino_from_antitau_eta, neutrino_from_antitau_phi, antitau_no_neutrino_mass, antitau_with_neutrino_mass]
                 
-                        gen_column_names_only_minus = ['gen_pi1_from_tau_pt', 'gen_pi1_from_tau_eta', 'gen_pi1_from_tau_phi', 'gen_pi2_from_tau_pt', 'gen_pi2_from_tau_eta', 'gen_pi2_from_tau_phi', 'gen_pi3_from_tau_pt', 'gen_pi3_from_tau_eta', 'gen_pi3_from_tau_phi',
-                               'gen_tau_pt', 'gen_tau_eta', 'gen_tau_phi']
+                        gen_column_names_only_minus = ['gen_pi1_from_antitau_pt', 'gen_pi1_from_antitau_eta', 'gen_pi1_from_antitau_phi', 'gen_pi2_from_antitau_pt', 'gen_pi2_from_antitau_eta', 'gen_pi2_from_antitau_phi', 'gen_pi3_from_antitau_pt', 'gen_pi3_from_antitau_eta', 'gen_pi3_from_antitau_phi',
+                               'gen_antitau_pt', 'gen_antitau_eta', 'gen_antitau_phi']
 
-                        add_gen_row = [gen_pi1_from_tau_pt, gen_pi1_from_tau_eta, gen_pi1_from_tau_phi, gen_pi2_from_tau_pt, gen_pi2_from_tau_eta, gen_pi2_from_tau_phi, gen_pi3_from_tau_pt, gen_pi3_from_tau_eta, gen_pi3_from_tau_phi,
-                               gen_tau_pt, gen_tau_eta, gen_tau_phi]
+                        add_gen_row = [gen_pi1_from_antitau_pt, gen_pi1_from_antitau_eta, gen_pi1_from_antitau_phi, gen_pi2_from_antitau_pt, gen_pi2_from_antitau_eta, gen_pi2_from_antitau_phi, gen_pi3_from_antitau_pt, gen_pi3_from_antitau_eta, gen_pi3_from_antitau_phi,
+                               gen_antitau_pt, gen_antitau_eta, gen_antitau_phi]
                 
                         add_row_df = pd.DataFrame([add_row], columns = df_toUse_antitau_only.columns)
                         df_toUse_antitau_only = pd.concat([df_toUse_antitau_only, add_row_df], ignore_index=True)
 
                         add_gen_row_df = pd.DataFrame([add_gen_row], columns = df_matched_gen_info_antitau_only.columns)
-                        df_matched_gen_info_antitau_only = pd.concat([df_matched_gen_info_antitau_only, add_gen_row_df], ignore_index=True)    
+                        df_matched_gen_info_antitau_only = pd.concat([df_matched_gen_info_antitau_only, add_gen_row_df], ignore_index=True) 
+
 
                     else:
                         num_antitaus_not_reconstructed = num_antitaus_not_reconstructed + 1
                             
 
                 if good_taum and good_taup:
+
                     #Entered if both daughters of the Upsilon particle decay properly
                     both_proper_decay = both_proper_decay + 1
 
@@ -599,10 +605,9 @@ if __name__ == '__main__':
                     gen_pi3_from_tau_eta = gen_pi3_plus_lv_unmatched.Eta()                        
                     gen_pi3_from_tau_phi = gen_pi3_plus_lv_unmatched.Phi()
 
-
-                    add_gen_row = [gen_pi1_from_tau_pt, gen_pi2_from_tau_pt, gen_pi3_from_tau_pt]
-                    add_gen_row_df = pd.DataFrame([add_gen_row], columns = df_unmatched_gen_info_tau_only.columns)
-                    df_unmatched_gen_info_tau_only = pd.concat([df_unmatched_gen_info_tau_only, add_gen_row_df], ignore_index=True) 
+                    add_gen_row_taup = [gen_pi1_from_tau_pt, gen_pi1_from_tau_eta, gen_pi1_from_tau_phi, gen_pi2_from_tau_pt, gen_pi2_from_tau_eta, gen_pi2_from_tau_phi, gen_pi3_from_tau_pt, gen_pi3_from_tau_eta, gen_pi3_from_tau_phi]
+                    add_gen_row_df_taup = pd.DataFrame([add_gen_row_taup], columns = df_unmatched_gen_info_tau_only.columns)
+                    df_unmatched_gen_info_tau_only = pd.concat([df_unmatched_gen_info_tau_only, add_gen_row_df_taup], ignore_index=True) 
 
                     #Add Generated info for the antitau pions
                     gen_pi1_minus_lv_unmatched = ROOT.TLorentzVector()
@@ -613,23 +618,21 @@ if __name__ == '__main__':
                     gen_pi2_minus_lv_unmatched.SetPtEtaPhiM(tau_minus_daughters[1].pt(), tau_minus_daughters[1].eta(), tau_minus_daughters[1].phi(), 0.139)
                     gen_pi3_minus_lv_unmatched.SetPtEtaPhiM(tau_minus_daughters[2].pt(), tau_minus_daughters[2].eta(), tau_minus_daughters[2].phi(), 0.139)
 
-                    gen_pi1_from_antitau_pt = gen_pi1_plus_lv_unmatched.Pt()
-                    gen_pi1_from_antitau_eta = gen_pi1_plus_lv_unmatched.Eta()
-                    gen_pi1_from_antitau_phi = gen_pi1_plus_lv_unmatched.Phi()
+                    gen_pi1_from_antitau_pt = gen_pi1_minus_lv_unmatched.Pt()
+                    gen_pi1_from_antitau_eta = gen_pi1_minus_lv_unmatched.Eta()
+                    gen_pi1_from_antitau_phi = gen_pi1_minus_lv_unmatched.Phi()
 
-                    gen_pi2_from_antitau_pt = gen_pi2_plus_lv_unmatched.Pt()
-                    gen_pi2_from_antitau_eta = gen_pi2_plus_lv_unmatched.Eta()
-                    gen_pi2_from_antitau_phi = gen_pi2_plus_lv_unmatched.Phi()
+                    gen_pi2_from_antitau_pt = gen_pi2_minus_lv_unmatched.Pt()
+                    gen_pi2_from_antitau_eta = gen_pi2_minus_lv_unmatched.Eta()
+                    gen_pi2_from_antitau_phi = gen_pi2_minus_lv_unmatched.Phi()
 
-                    gen_pi3_from_antitau_pt = gen_pi3_plus_lv_unmatched.Pt()
-                    gen_pi3_from_antitau_eta = gen_pi3_plus_lv_unmatched.Eta()                        
-                    gen_pi3_from_antitau_phi = gen_pi3_plus_lv_unmatched.Phi()
+                    gen_pi3_from_antitau_pt = gen_pi3_minus_lv_unmatched.Pt()
+                    gen_pi3_from_antitau_eta = gen_pi3_minus_lv_unmatched.Eta()                        
+                    gen_pi3_from_antitau_phi = gen_pi3_minus_lv_unmatched.Phi()
 
-
-                    add_gen_row = [gen_pi1_from_antitau_pt, gen_pi2_from_antitau_pt, gen_pi3_from_antitau_pt]
-                    add_gen_row_df = pd.DataFrame([add_gen_row], columns = df_unmatched_gen_info_antitau_only.columns)
-
-                    df_unmatched_gen_info_antitau_only = pd.concat([df_unmatched_gen_info_antitau_only, add_gen_row_df], ignore_index=True)                     
+                    add_gen_row_taum = [gen_pi1_from_antitau_pt, gen_pi1_from_antitau_eta, gen_pi1_from_antitau_phi, gen_pi2_from_antitau_pt, gen_pi2_from_antitau_eta, gen_pi2_from_antitau_phi, gen_pi3_from_antitau_pt, gen_pi3_from_antitau_eta, gen_pi3_from_antitau_phi]
+                    add_gen_row_df_taum = pd.DataFrame([add_gen_row_taum], columns = df_unmatched_gen_info_antitau_only.columns)
+                    df_unmatched_gen_info_antitau_only = pd.concat([df_unmatched_gen_info_antitau_only, add_gen_row_df_taum], ignore_index=True)                     
 
                     #Matching gen to reco now
                     antitau_from_upsilon = tau_minus_keep
@@ -852,7 +855,7 @@ if __name__ == '__main__':
                         num_both_not_reconstructed = num_both_not_reconstructed + 1
                         
 
-    tracking_info = [both_proper_decay, proper_tau_decay_only, proper_antitau_decy_only, no_proper_decays, num_taus_fully_reconstructed, num_taus_not_reconstructed, num_antitaus_fully_reconstructed, num_antitaus_not_reconstructed, num_both_fully_reconstructed, num_both_not_reconstructed]
+    tracking_info = [both_proper_decay, proper_tau_decay_only, proper_antitau_decay_only, no_proper_decays, num_taus_fully_reconstructed, num_taus_not_reconstructed, num_antitaus_fully_reconstructed, num_antitaus_not_reconstructed, num_both_fully_reconstructed, num_both_not_reconstructed]
     add_tracking_row_df = pd.DataFrame([tracking_info], columns = df_tracking_frequency.columns)
     df_tracking_frequency = pd.concat([df_tracking_frequency, add_tracking_row_df], ignore_index=True)
 
