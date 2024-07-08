@@ -859,19 +859,23 @@ if __name__ == '__main__':
     add_tracking_row_df = pd.DataFrame([tracking_info], columns = df_tracking_frequency.columns)
     df_tracking_frequency = pd.concat([df_tracking_frequency, add_tracking_row_df], ignore_index=True)
 
-
+    #Information that contains the matched gen info and the info to use by the model in the case that the upsilon decays into two proper taus
     df_toUse_both.to_csv('/isilon/export/home/gpitt3/tau-decay-ml/preprocessing/both_proper_decay_info.csv')
     df_matched_gen_info_both.to_csv('/isilon/export/home/gpitt3/tau-decay-ml/preprocessing/gen_info_both_proper_decay.csv')
 
+    #Information that contains the unmatched geenrated data for the pions for each of the tau and antitau
     df_unmatched_gen_info_tau_only.to_csv('/isilon/export/home/gpitt3/tau-decay-ml/preprocessing/unmatched_gen_info_tau_only.csv')
     df_unmatched_gen_info_antitau_only.to_csv('/isilon/export/home/gpitt3/tau-decay-ml/preprocessing/unmatched_gen_info_antitau_only.csv')
 
+    #Information that contains the matched gen info and the info to use by the model in the case that the upsilon decays into one proper tau
     df_toUse_tau_only.to_csv('/isilon/export/home/gpitt3/tau-decay-ml/preprocessing/tau_proper_decay_info.csv')
     df_matched_gen_info_tau_only.to_csv('/isilon/export/home/gpitt3/tau-decay-ml/preprocessing/gen_info_tau_proper_decay.csv')
 
+    #Information that contains the matched gen info and the info to use by the model in the case that the upsilon decays into one proper antitau
     df_toUse_antitau_only.to_csv('/isilon/export/home/gpitt3/tau-decay-ml/preprocessing/anti_proper_decay_info.csv')
     df_matched_gen_info_antitau_only.to_csv('/isilon/export/home/gpitt3/tau-decay-ml/preprocessing/gen_info_antitau_proper_decay.csv')
 
+    #Contains counts for each of the cases - see column names
     df_tracking_frequency.to_csv('/isilon/export/home/gpitt3/tau-decay-ml/preprocessing/tracking_frequency.csv')
 
 
