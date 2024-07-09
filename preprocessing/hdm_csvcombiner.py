@@ -91,9 +91,9 @@ combined_df_gen = pd.concat(dataframes_gen, ignore_index=True)
 combined_df_unmatched = pd.concat(dataframes_unmatched, ignore_index=True)
 
 # Save the combined dataframe to a new CSV file
-combined_df_tracking.to_csv('/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/tracking_frequency_alldata15GeV.csv', index=False)
-combined_df_reco.to_csv('/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/reco_alldata15GeV.csv', index=False)
-combined_df_gen.to_csv('/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/gen_alldata15GeV.csv', index=False)
-combined_df_unmatched.to_csv('/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/unmatched_alldata15GeV.csv', index=False)
+combined_df_tracking.to_csv('/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/tracking_frequency_alldata.csv', index=False)
+combined_df_reco.to_csv('/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/reco_alldata.csv', index=False)
+combined_df_gen.to_csv('/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/gen_alldata.csv', index=False)
+combined_df_unmatched.to_csv('/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/unmatched_alldata.csv', index=False)
 
 print("All CSV files combined")
