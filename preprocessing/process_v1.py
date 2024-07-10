@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
     # Argument parser and fixing the CMSSW version via the options container
     parser = argparse.ArgumentParser(description='Args')
-    parser.add_argument('--f_in', default='UpsilonToTauTau_PUPoissonAve20_102X_upgrade2018_realistic_v18_3prong_m15_miniaod_part0') 
+    parser.add_argument('--f_in', default=f'UpsilonToTauTau_PUPoissonAve20_102X_upgrade2018_realistic_v18_3prong_m15_miniaod_part{i}') 
     #parser.add_argument('--maxEvents', default = 100)
     args = parser.parse_args()
 

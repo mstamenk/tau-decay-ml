@@ -34,8 +34,10 @@ massive_upsilon_count = 0
 proper_decay_number = 0
 tagged_num = 0
 
+reco_pions = 0
+
 for i in range(10):
-    #if i != 2 and i!=6:
+    # if i != 2 and i!=6:
 # Main 
 
         if __name__ == '__main__':
@@ -338,6 +340,7 @@ for i in range(10):
                                 match = False
                                 for reco_particle in pf_particles:
                                     if reco_particle.pdgId() == gen_pion_plus.pdgId():
+                                        reco_pions += 1
 
                                         reco_lv = ROOT.TLorentzVector() 
                                         reco_lv.SetPtEtaPhiM(reco_particle.pt(), reco_particle.eta(), reco_particle.phi(), reco_particle.mass())
@@ -492,6 +495,7 @@ for i in range(10):
                                 match = False
                                 for reco_particle in pf_particles:
                                     if reco_particle.pdgId() == gen_pion_minus.pdgId():
+                                        reco_pions += 1
 
                                         reco_lv = ROOT.TLorentzVector() 
                                         reco_lv.SetPtEtaPhiM(reco_particle.pt(), reco_particle.eta(), reco_particle.phi(), reco_particle.mass())
@@ -669,6 +673,7 @@ for i in range(10):
                                 match = False
                                 for reco_particle in pf_particles:
                                     if reco_particle.pdgId() == gen_pion_plus.pdgId():
+                                        reco_pions += 1
 
                                         reco_lv = ROOT.TLorentzVector() 
                                         reco_lv.SetPtEtaPhiM(reco_particle.pt(), reco_particle.eta(), reco_particle.phi(), reco_particle.mass())
@@ -693,6 +698,7 @@ for i in range(10):
                                 match = False
                                 for reco_particle in pf_particles:
                                     if reco_particle.pdgId() == gen_pion_minus.pdgId():
+                                        reco_pions += 1
 
                                         reco_lv = ROOT.TLorentzVector() 
                                         reco_lv.SetPtEtaPhiM(reco_particle.pt(), reco_particle.eta(), reco_particle.phi(), reco_particle.mass())
@@ -1024,36 +1030,49 @@ for i in range(10):
                             #     num_both_not_reconstructed = num_both_not_reconstructed + 1
                                 
 
-            tracking_info = [both_proper_decay, proper_tau_decay_only, proper_antitau_decay_only, no_proper_decays, num_taus_fully_reconstructed, num_taus_not_reconstructed, num_antitaus_fully_reconstructed, num_antitaus_not_reconstructed, num_both_fully_reconstructed, num_both_not_reconstructed]
-            add_tracking_row_df = pd.DataFrame([tracking_info], columns = df_tracking_frequency.columns)
-            df_tracking_frequency = pd.concat([df_tracking_frequency, add_tracking_row_df], ignore_index=True)
+            # tracking_info = [both_proper_decay, proper_tau_decay_only, proper_antitau_decay_only, no_proper_decays, num_taus_fully_reconstructed, num_taus_not_reconstructed, num_antitaus_fully_reconstructed, num_antitaus_not_reconstructed, num_both_fully_reconstructed, num_both_not_reconstructed]
+            # add_tracking_row_df = pd.DataFrame([tracking_info], columns = df_tracking_frequency.columns)
+            # df_tracking_frequency = pd.concat([df_tracking_frequency, add_tracking_row_df], ignore_index=True)
 
-            #Information that contains the matched gen info and the info to use by the model in the case that the upsilon decays into two proper taus
-            df_toUse_both.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/both_proper_decay_info{i+20}.csv')
-            df_matched_gen_info_both.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/gen_info_both_proper_decay{i+20}.csv')
+            # #Information that contains the matched gen info and the info to use by the model in the case that the upsilon decays into two proper taus
+            # df_toUse_both.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/both_proper_decay_info{i+20}.csv')
+            # df_matched_gen_info_both.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/gen_info_both_proper_decay{i+20}.csv')
 
-            #Information that contains the unmatched geenrated data for the pions for each of the tau and antitau
-            df_unmatched_gen_info_tau_only.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/unmatched_gen_info_tau_only{i+20}.csv')
-            df_unmatched_gen_info_antitau_only.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/unmatched_gen_info_antitau_only{i+20}.csv')
+            # #Information that contains the unmatched geenrated data for the pions for each of the tau and antitau
+            # df_unmatched_gen_info_tau_only.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/unmatched_gen_info_tau_only{i+20}.csv')
+            # df_unmatched_gen_info_antitau_only.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/unmatched_gen_info_antitau_only{i+20}.csv')
 
-            #Information that contains the matched gen info and the info to use by the model in the case that the upsilon decays into one proper tau
-            df_toUse_tau_only.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/tau_proper_decay_info{i+20}.csv')
-            df_matched_gen_info_tau_only.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/gen_info_tau_proper_decay{i+20}.csv')
+            # #Information that contains the matched gen info and the info to use by the model in the case that the upsilon decays into one proper tau
+            # df_toUse_tau_only.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/tau_proper_decay_info{i+20}.csv')
+            # df_matched_gen_info_tau_only.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/gen_info_tau_proper_decay{i+20}.csv')
 
-            #Information that contains the matched gen info and the info to use by the model in the case that the upsilon decays into one proper antitau
-            df_toUse_antitau_only.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/anti_proper_decay_info{i+20}.csv')
-            df_matched_gen_info_antitau_only.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/gen_info_antitau_proper_decay{i+20}.csv')
+            # #Information that contains the matched gen info and the info to use by the model in the case that the upsilon decays into one proper antitau
+            # df_toUse_antitau_only.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/anti_proper_decay_info{i+20}.csv')
+            # df_matched_gen_info_antitau_only.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/gen_info_antitau_proper_decay{i+20}.csv')
 
-            #Contains counts for each of the cases - see column names
-            df_tracking_frequency.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/tracking_frequency{i+20}.csv')
+            # #Contains counts for each of the cases - see column names
+            # df_tracking_frequency.to_csv(f'/isilon/export/home/hdmiller/cms_work/tau-decay-ml/preprocessing/individual_datasets_15GeV/tracking_frequency{i+20}.csv')
 
-print("We should begin with 100,000 taus from 50,000 upsilons.")
-print("Yet only:")
-print(massive_upsilon_count * 2)
-print("taus come from a nominal mass upsilon.")
-print("And only:")
-print(proper_decay_number)
-print("taus decay properly.")
-print("Further, we where only able to tag:")
-print(tagged_num)
-print("of the taus. This is a much smaller number than 100,000.")
+# print("We should begin with 100,000 taus from 50,000 upsilons.")
+# print("Yet only:")
+# print(massive_upsilon_count * 2)
+# print("taus come from a nominal mass upsilon.")
+# print("And only:")
+# print(proper_decay_number)
+# print("taus decay properly.")
+# print("Further, we where only able to tag:")
+# print(tagged_num)
+# print("of the taus. This is a much smaller number than 100,000.")
+
+# print("we have this many reco tracks (pions only)")
+# print(reco_pions)
+# print("we should have:")
+# print(proper_decay_number*3)
+# adnoio = proper_decay_number*3
+# print('^ that many good gen pions')
+# print('thus, we have:')
+# print(reco_pions/adnoio)
+# print('reco tracks (pions) per good gen pion for these 10 files')
+# print('and also we should have:')
+# print(reco_pions/50000)
+# print('^ that many reco tracks (pions) per total events (50000) for the 10 files')
